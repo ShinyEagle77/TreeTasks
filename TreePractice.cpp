@@ -174,8 +174,36 @@ public:
 		return root;
 	}
 
+	int rangeSumBST(TreeNode* root, int low, int high) // sum of values of all nodes [low, high]
+	{
+		int resultSum = 0;
+		IterateThrough(root, resultSum, low, high);
+
+		return resultSum;
+	}
+
 
 private:
+
+	void IterateThrough(TreeNode* root, int& resultSum, int low, int high)
+	{
+		if (!root) return;
+
+		if (root->val >= low && root->val <= high)
+		{
+			resultSum += root->val;
+		}
+
+		if (root->left && (root->left->val > low || root->left->val < high))
+		{
+			IterateThrough(root->left, resultSum, low, high);
+		}
+
+		if (root->right && (root->right->val > low || root->right->val < high))
+		{
+			IterateThrough(root->right, resultSum, low, high);
+		}
+	}
 
 	void FindSum(TreeNode* root, int targetSum, vector<int>& path, vector<vector<int>>& answer) // FindTargetSum
 	{
