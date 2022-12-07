@@ -136,7 +136,7 @@ public:
 
 	TreeNode* invertTree(TreeNode* root) // InvertBinaryTree
 	{
-		if (!root) return;
+		if (!root) return root;
 
 		TreeNode* temp = root->left;
 		root->left = root->right;
@@ -144,6 +144,32 @@ public:
 
 		invertTree(root->left);
 		invertTree(root->right);
+
+		return root;
+	}
+
+	TreeNode* invertTreeIterative(TreeNode* root)
+	{
+		if (!root) return root;
+
+		stack<TreeNode*> data;
+		data.push(root);
+
+		while (!data.empty())
+		{
+			TreeNode* node = data.top();
+			data.pop();
+
+			if (node)
+			{
+				data.push(node->left);
+				data.push(node->right);
+
+				TreeNode* temp = node->left;
+				node->left = node->right;
+				node->right = temp;
+			}
+		}
 
 		return root;
 	}
