@@ -182,8 +182,46 @@ public:
 		return resultSum;
 	}
 
+	bool leafSimilar(TreeNode* root1, TreeNode* root2)
+	{
+		vector<int> leaves_1;
+		vector<int> leaves_2;
+
+		FindLeaves(root1, leaves_1);
+		FindLeaves(root2, leaves_2);
+
+		for (const auto& x : leaves_1)
+		{
+			cout << x << ' ';
+		}
+
+		cout << endl;
+
+		for (const auto& x : leaves_2)
+		{
+			cout << x << ' ';
+		}
+
+		cout << endl;
+
+		return equal(leaves_1.begin(), leaves_1.end(), leaves_2.begin(), leaves_2.end());
+	}
+
 
 private:
+
+	void FindLeaves(TreeNode* root, vector<int>& leaves)
+	{
+		if (!root) return;
+
+		if (!root->left && !root->right)
+		{
+			leaves.push_back(root->val);
+		}
+
+		if (root->left) FindLeaves(root->left, leaves);
+		if (root->right) FindLeaves(root->right, leaves);
+	}
 
 	void IterateThrough(TreeNode* root, int& resultSum, int low, int high)
 	{
@@ -194,14 +232,14 @@ private:
 			resultSum += root->val;
 		}
 
-		if (root->left && (root->left->val > low || root->left->val < high))
+		if(root->val > low)
 		{
-			IterateThrough(root->left, resultSum, low, high);
+			if (root->left) IterateThrough(root->left, resultSum, low, high);
 		}
 
-		if (root->right && (root->right->val > low || root->right->val < high))
+		if (root->val < high)
 		{
-			IterateThrough(root->right, resultSum, low, high);
+			if (root->right) IterateThrough(root->right, resultSum, low, high);
 		}
 	}
 
@@ -274,9 +312,17 @@ private:
 
 int main()
 {
-	TreeNode* val = new TreeNode (1);
+	TreeNode* root1 = new TreeNode(1);
+	root1->left = new TreeNode(2);
+	root1->right = new TreeNode(3);
+
+	TreeNode* root2 = new TreeNode(1);
+	root2->left = new TreeNode(3);
+	root2->right = new TreeNode(2);
+
 	Solution object;
 
-	cout << object.findTarget(val, 1) << endl;
+	object.leafSimilar(root1, root2);
+
 	return 0;
 }
