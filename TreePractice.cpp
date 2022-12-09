@@ -182,33 +182,39 @@ public:
 		return resultSum;
 	}
 
-	bool leafSimilar(TreeNode* root1, TreeNode* root2)
+	bool leafSimilar(TreeNode* root1, TreeNode* root2) // check if leaf of root1 == root2
 	{
-		vector<int> leaves_1;
-		vector<int> leaves_2;
+		if (!root1 && !root2) return true;
+
+		if (!root1 || !root2) return false;
+
+		vector<int> leaves_1, leaves_2;
 
 		FindLeaves(root1, leaves_1);
 		FindLeaves(root2, leaves_2);
 
-		for (const auto& x : leaves_1)
-		{
-			cout << x << ' ';
-		}
+		if (leaves_1.size() != leaves_2.size()) return false;
 
-		cout << endl;
+		return leaves_1 == leaves_2;
+	}
 
-		for (const auto& x : leaves_2)
-		{
-			cout << x << ' ';
-		}
-
-		cout << endl;
-
-		return equal(leaves_1.begin(), leaves_1.end(), leaves_2.begin(), leaves_2.end());
+	int maxAncestorDiff(TreeNode* root) // return max diff parent - children
+	{
+		return AncestorSearch(root, 0, 100000);
 	}
 
 
 private:
+
+	int AncestorSearch(TreeNode* root, int cur_max, int cur_min)
+	{
+		if (!root) return cur_max - cur_min;
+
+		cur_min = min(cur_min, root->val);
+		cur_max = max(cur_max, root->val);
+
+		return max(AncestorSearch(root->left, cur_max, cur_min), AncestorSearch(root->right, cur_max, cur_min));
+	}
 
 	void FindLeaves(TreeNode* root, vector<int>& leaves)
 	{
@@ -312,17 +318,22 @@ private:
 
 int main()
 {
-	TreeNode* root1 = new TreeNode(1);
-	root1->left = new TreeNode(2);
-	root1->right = new TreeNode(3);
+	TreeNode* root = new TreeNode(8);
+	root->left = new TreeNode(3);
+	root->right = new TreeNode(10);
 
-	TreeNode* root2 = new TreeNode(1);
-	root2->left = new TreeNode(3);
-	root2->right = new TreeNode(2);
+	root->left->left = new TreeNode(1);
+	root->left->right = new TreeNode(6);
+
+	root->right->right = new TreeNode(14);
+	root->right->right->right = new TreeNode(13);
+
+	root->left->right->left = new TreeNode(4);
+	root->left->right->right = new TreeNode(7);
 
 	Solution object;
 
-	object.leafSimilar(root1, root2);
+	cout << object.maxAncestorDiff(root) << endl;
 
 	return 0;
 }
