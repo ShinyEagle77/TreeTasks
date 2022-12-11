@@ -203,8 +203,26 @@ public:
 		return AncestorSearch(root, 0, 100000);
 	}
 
+	int maxPathSum(TreeNode* root) // find maxPathSum in Binary Tree 
+	{
+		int maxSum = INT_MIN;
+		MaxPathSum(root, maxSum);
+		return maxSum;
+	}
 
 private:
+
+	int MaxPathSum(TreeNode* root, int& maxSum)
+	{
+		if (!root) return 0;
+
+		int l = max(0, MaxPathSum(root->left, maxSum));
+		int r = max(0, MaxPathSum(root->right, maxSum));
+
+		maxSum = max(maxSum, l + r + root->val);
+
+		return max(l, r) + root->val;
+	}
 
 	int AncestorSearch(TreeNode* root, int cur_max, int cur_min)
 	{
