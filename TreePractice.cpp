@@ -210,7 +210,26 @@ public:
 		return maxSum;
 	}
 
+	vector<int> preorderTraversal(TreeNode* root) // Binary Tree Preorder Traversal
+	{
+		vector<int> data;
+		preorderTraversalRec(root, data);
+
+		return data;
+	}
+
 private:
+	void preorderTraversalRec(TreeNode* root, vector<int>& data)
+	{
+		if (!root) return;
+
+		data.push_back(root->val);
+
+		preorderTraversalRec(root->left, data);
+		preorderTraversalRec(root->right, data);
+	}
+
+	
 
 	int MaxPathSum(TreeNode* root, int& maxSum)
 	{
